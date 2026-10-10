@@ -72,6 +72,7 @@ def make_round_photo(size=600, ring=14):
     out = Image.new("RGBA", (size, size), (255, 255, 255, 0))
     out.paste(Image.new("RGBA", (size, size), (255, 255, 255, 255)), (0, 0), mask)  # white ring
     out.paste(src, (0, 0), inner)
+    ROUND_PHOTO.parent.mkdir(exist_ok=True)
     out.save(ROUND_PHOTO)
 
 
@@ -220,7 +221,8 @@ def build_sidebar(cell):
     p = cell.paragraphs[0]
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_after = Pt(6)
-    p.add_run().add_picture(str(ROUND_PHOTO), width=Inches(1.6), height=Inches(1.6))
+    if PHOTO.exists():  # the photo is not in git; skip it when absent
+        p.add_run().add_picture(str(ROUND_PHOTO), width=Inches(1.6), height=Inches(1.6))
 
     side_heading(cell, "Contact")
     for key, value in CONTACT.items():
@@ -298,7 +300,8 @@ def build_main(cell):
 
 
 def build_docx():
-    make_round_photo()
+    if PHOTO.exists():
+        make_round_photo()
     doc = Document()
     normal = doc.styles["Normal"]
     normal.font.name, normal.font.size = FONT, Pt(9.5)

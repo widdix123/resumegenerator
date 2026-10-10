@@ -6,5 +6,6 @@
 !/resume.md
 !/build.command
 !/scripts/
+!/.github/
 scripts/__pycache__/
 .DS_Store

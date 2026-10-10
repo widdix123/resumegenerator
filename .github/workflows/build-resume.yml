@@ -1,0 +1,56 @@
+# Rebuilds the resume PDFs/DOCX whenever resume.md (or the build code) is pushed to main.
+# Download the results from the run page: Actions → "Build resume" → the run → Artifacts.
+name: Build resume
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - resume.md
+      - scripts/**
+      - .github/workflows/build-resume.yml
+  workflow_dispatch:  # also allows a manual run from the Actions tab
+
+jobs:
+  build:
+    # macOS has Chrome at the path the scripts expect and the Avenir Next font,
+    # so the PDF matches a local build exactly.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python packages
+        run: pip install python-docx pillow
+
+      # The photo is kept out of the public repo. Store it base64-encoded in the
+      # RESUME_PHOTO_B64 repository secret; without it the resume builds with no photo.
+      - name: Restore photo from secret
+        env:
+          PHOTO_B64: ${{ secrets.RESUME_PHOTO_B64 }}
+        run: |
+          if [ -n "$PHOTO_B64" ]; then
+            python -c "import base64, os; open('AbhishekGupta.jpg', 'wb').write(base64.b64decode(os.environ['PHOTO_B64']))"
+          else
+            echo "::notice::RESUME_PHOTO_B64 secret not set; building without a photo."
+          fi
+
+      - name: Build resumes
+        run: |
+          python scripts/create_designed_resume.py
+          python scripts/create_ats_resume.py
+          python scripts/create_designed_docx.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resume
+          path: |
+            Abhishek_Gupta_Resume_Designed.pdf
+            Abhishek_Gupta_Resume_ATS.pdf
+            Abhishek_Gupta_Resume_ATS.docx
+            Abhishek_Gupta_Resume_Designed.docx
+          if-no-files-found: error
+          retention-days: 30

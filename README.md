@@ -22,6 +22,25 @@ python3 scripts/create_designed_resume.py   # designed PDF (photo + sidebar)
 python3 scripts/create_ats_resume.py        # ATS PDF + ATS DOCX
 ```
 
+## Build on GitHub (automatic)
+
+Every push to `main` that changes `resume.md` (or `scripts/`) runs the **Build resume** pipeline
+([.github/workflows/build-resume.yml](.github/workflows/build-resume.yml)). To get the files:
+
+1. Open the repo on GitHub → **Actions** → **Build resume** → the latest run.
+2. Under **Artifacts**, download **resume** (a zip with both PDFs and both DOCX files).
+
+You can also start a build by hand: Actions → Build resume → **Run workflow**.
+
+**Photo (optional, one-time):** the photo is not in the repo. To include it in pipeline builds,
+store it as a repository secret named `RESUME_PHOTO_B64`:
+
+```bash
+base64 -i AbhishekGupta.jpg | gh secret set RESUME_PHOTO_B64 -R widdix123/resumegenerator
+```
+
+Without the secret, the pipeline still builds, just with no photo.
+
 ## Folder layout
 
 ```

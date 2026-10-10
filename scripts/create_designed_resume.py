@@ -95,7 +95,9 @@ main h2 { font-size: 11pt; letter-spacing: .14em; text-transform: uppercase; col
 
 def build_html():
     e = html.escape
-    photo = base64.b64encode(PHOTO.read_bytes()).decode()
+    # The photo is not in git; without it the sidebar simply starts at Contact.
+    photo = (f'<img class="photo" src="data:image/jpeg;base64,{base64.b64encode(PHOTO.read_bytes()).decode()}" alt="{e(NAME)}">'
+             if PHOTO.exists() else "")
     first, _, last = NAME.partition(" ")
 
     contact = "".join(
@@ -128,7 +130,7 @@ def build_html():
 <div class="side-bg"></div>
 <div class="layout">
 <aside>
-  <img class="photo" src="data:image/jpeg;base64,{photo}" alt="{e(NAME)}">
+  {photo}
   <h2>Contact</h2><ul class="contact">{contact}</ul>
   <h2>Certifications</h2>{certs}
   <h2>Education</h2>{edu}

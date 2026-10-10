@@ -6,6 +6,7 @@ consistent "Mon YYYY" dates, and common fonts.
 """
 from pathlib import Path
 import html
+import os
 import subprocess
 
 from docx import Document
@@ -18,7 +19,8 @@ ROOT = Path(__file__).resolve().parent.parent  # the resume folder (scripts/ liv
 DOCX_OUT = ROOT / "Abhishek_Gupta_Resume_ATS.docx"
 PDF_OUT = ROOT / "Abhishek_Gupta_Resume_ATS.pdf"
 HTML_TMP = ROOT / "preview" / "ats_resume.html"
-CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+# Override with the CHROME env var on other machines (the CI pipeline does).
+CHROME = os.environ.get("CHROME", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 
 # ---- Content (edit resume.md, not this file) --------------------------------
 
