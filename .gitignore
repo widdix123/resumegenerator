@@ -1,0 +1,10 @@
+# Whitelist: ignore everything, then allow only what belongs in the repo.
+# Keeps the photo, generated PDFs/DOCX, notes and chrome-profile/ (saved logins) out of git.
+/*
+!/.gitignore
+!/README.md
+!/resume.md
+!/build.command
+!/scripts/
+scripts/__pycache__/
+.DS_Store
