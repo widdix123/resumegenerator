@@ -12,7 +12,7 @@
 
 # Abhishek Gupta
 headline: Senior DevSecOps Lead | Cloud Security & Compliance | Platform Engineering | Kubernetes (CKA) | AWS Certified
-tagline: I build and secure the cloud platforms that money moves on.
+tagline: Securing and scaling cloud platforms for regulated financial services.
 
 ## Contact
 - location: Pune, India
